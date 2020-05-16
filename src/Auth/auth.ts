@@ -18,7 +18,7 @@ export default class Auth {
       clientID: 'PalYUmcqWSfe6TeKptEAn1N25az3OQeU',
       //process.env.REACT_APP_AUTH0_CLIENTID,
       //This to be configured for ENV..
-      redirectUri: 'http://localhost:3000/callback',
+      redirectUri: 'https://paper-and-pen.herokuapp.com/',
       //process.env.REACT_APP_AUTH0_CALLBACK,
       responseType: 'token id_token',
       scope: this.requestedScopes,
