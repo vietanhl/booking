@@ -1,0 +1,2 @@
+(this.webpackJsonpbooking=this.webpackJsonpbooking||[]).push([[15],{327:function(t,n,e){"use strict";e.r(n);var a=e(0),o=e.n(a),i=e(44);n.default=function(t){var n=t.auth.isAuthenticated;return console.log(t.auth),o.a.createElement(o.a.Fragment,null,o.a.createElement(i.a,{title:"Login"}),n()?null:o.a.createElement("button",{onClick:t.auth.login},"Login"))}}}]);
+//# sourceMappingURL=15.e929abe3.chunk.js.map
