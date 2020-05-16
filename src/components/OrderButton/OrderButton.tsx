@@ -70,7 +70,6 @@ const OrderButton: React.FunctionComponent = (props: any) => {
     const year = props.location.state.date.split('-')[0];
     const month = props.location.state.date.split('-')[1];
     const day = props.location.state.date.split('-')[2];
-
     api.createBooking(
       year,
       month,
@@ -80,7 +79,8 @@ const OrderButton: React.FunctionComponent = (props: any) => {
       props.form.firstName,
       props.form.lastName,
       props.form.email,
-      props.form.phone
+      props.form.phone,
+      props.form.comments
     );
     // Assertion on this response if successful.
   };
