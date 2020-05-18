@@ -9,7 +9,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 interface State extends React.Props<any> {
-  id: number;
+  id: string;
   title: string;
   start: string;
   end: string;
@@ -62,7 +62,7 @@ const Modal: React.FunctionComponent = (event: any, props: any) => {
   const [booking, setBooking]: any = useState({});
   const classes = useStyles();
   const [values, setValues]: any = React.useState<State>({
-    id: 0,
+    id: '',
     title: '',
     start: '',
     end: '',
@@ -123,7 +123,7 @@ const Modal: React.FunctionComponent = (event: any, props: any) => {
       endTime: values.end,
     };
     console.log('booking ID' + values.id);
-    api.updateBooking(mappedDetails, values.id?.toString());
+    api.updateBooking(mappedDetails, values.id);
     succesAlert();
     console.log(typeof mappedDetails.startTime);
     console.log('mapped: ' + JSON.stringify(mappedDetails));
@@ -132,7 +132,7 @@ const Modal: React.FunctionComponent = (event: any, props: any) => {
   const deleteBooking = () => {
     console.log('deleteBooking');
     succesAlert();
-    api.deleteBooking(values.id?.toString());
+    api.deleteBooking(values.id);
   };
   // useEffect(() => {
   //   console.log(booking);
@@ -167,7 +167,7 @@ const Modal: React.FunctionComponent = (event: any, props: any) => {
   };
 
   const succesAlert = () => {
-    toast.success(`✔ `);
+    toast.success(`✔ please refresh to display changes`);
   };
 
   const updateBookingIsDisabled = () => {
@@ -177,20 +177,21 @@ const Modal: React.FunctionComponent = (event: any, props: any) => {
     // console.log('value' + values.start);
 
     if (
-      values.id === undefined ||
-      values.title === '' ||
-      values.start === '' ||
-      values.end === '' ||
-      values.employee === '' ||
-      values.firstName === '' ||
-      values.lastName === '' ||
-      values.email === '' ||
-      values.phone === '' ||
-      values.treatmentId === '' ||
-      values.notes === '' ||
-      values.treatmentName === '' ||
-      values.bookingId === '' ||
-      values.date === ''
+      values.id === undefined
+      // ||
+      // values.title === '' ||
+      // values.start === '' ||
+      // values.end === '' ||
+      // values.employee === '' ||
+      // values.firstName === '' ||
+      // values.lastName === '' ||
+      // values.email === '' ||
+      // values.phone === '' ||
+      // values.treatmentId === '' ||
+      // values.notes === '' ||
+      // values.treatmentName === '' ||
+      // values.bookingId === '' ||
+      // values.date === ''
     ) {
       return true;
     } else {
