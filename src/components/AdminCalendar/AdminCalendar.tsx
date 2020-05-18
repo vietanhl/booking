@@ -16,7 +16,7 @@ const AdminCalendar: React.FunctionComponent = (props: any) => {
 
   const [event, setEvent] = useState([
     {
-      id: 15,
+      id: '15',
       title: '1Treatment',
       start: now,
       end: now,
@@ -41,7 +41,7 @@ const AdminCalendar: React.FunctionComponent = (props: any) => {
 
         const eventsMapped = res.map((booking: any) => {
           return {
-            id: parseInt(booking.ID),
+            id: booking.ID,
             title: `${booking.EmployeeName} - Client: ${booking.Clients.FirstName} Treatment: ${booking.TreatmentNames}`,
             start: new Date(booking.StartTime),
             end: new Date(booking.EndTime),
