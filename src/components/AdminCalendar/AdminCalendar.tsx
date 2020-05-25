@@ -14,6 +14,7 @@ const AdminCalendar: React.FunctionComponent = (props: any) => {
   const [currentEven, setCurrentEvent] = useState();
   console.log(now);
 
+  //TODO: Change default booking.
   const [event, setEvent] = useState([
     {
       id: '15',
