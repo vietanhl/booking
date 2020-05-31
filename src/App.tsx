@@ -1,6 +1,12 @@
 import React from 'react';
 import './App.css';
-import { Switch, Route, BrowserRouter, Redirect } from 'react-router-dom';
+import {
+  Switch,
+  Route,
+  BrowserRouter,
+  Redirect,
+  NavLink,
+} from 'react-router-dom';
 import styled from 'styled-components';
 import Menu from './components/Menu/Menu';
 import {
@@ -37,6 +43,9 @@ const App = (props: any) => {
 
   return (
     <>
+      <NavLink className="menu-heading" to="/home">
+        <p className="centered">Paper&Pen</p>
+      </NavLink>{' '}
       <Header>
         <BrowserRouter>
           {/* <Menu auth={auth} {...props} /> */}

@@ -37,12 +37,12 @@ const ContainerLogo = styled.li`
 const Menu: React.FunctionComponent = (props: any) => {
   const { isAuthenticated } = props.auth;
   return (
-    <div>
+    <div className="absolute">
       <ContainerUl>
         <ContainerLogo>
           {' '}
-          <NavLink className="heading" to="/home">
-            {companyName}
+          <NavLink className="menu-heading" to="/home">
+            Home
           </NavLink>{' '}
         </ContainerLogo>
         <ContainerLi>
