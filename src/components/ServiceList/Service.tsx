@@ -29,7 +29,6 @@ const useStyles = makeStyles((theme: Theme) =>
     heading: {
       fontSize: theme.typography.pxToRem(15),
       fontFamily: 'Abril Fatface',
-      // fontWeight: theme.typography.fontWeightBold,
     },
   })
 );
@@ -42,30 +41,35 @@ const theme = createMuiTheme({
   },
 });
 
-const Service: React.FunctionComponent<any> = (props: any) => {
+const Service: React.FunctionComponent<any> = (
+  props: any,
+  preSelectedTreatmentName?: any,
+  preSelectedTreatmentId?: any
+) => {
   const [treatment, setTreatment]: any = useState();
   const [treatmentName, setTreatmentName] = useState(['NoTreatmentAvailable']);
+  const [selectedTreatment, setSelectedTreatment] = useState([0]);
+  const [treatmentType, setTreatmentType] = useState([]);
+
   useEffect(() => {
     async function fetchMyApi() {
       const res = await api.getTreatments();
       setTreatment(res);
-      // console.log('treatments: ' + res);
+      var treatmentTypes: any = [];
+      const treatmentTypeRes = await api.getTreatmentTypes();
+      treatmentTypeRes.map((treatmentType: any) => {        
+        treatmentTypes.push(treatmentType.Type);
+      });
+      setTreatmentType(treatmentTypes);
+      console.log(treatmentTypeRes);
     }
-    fetchMyApi();
+    fetchMyApi();    
   }, []);
 
-  // Saving the information when navigating back
-  // useEffect(() => {
-  //   console.log(
-  //     'inside service: ' + JSON.stringify(props.history.location.state)
-  //   );
-  //   if (props.history.location.state.treatmentId !== undefined) {
-  //     setSelectedTreatment(props.history.location.state.treatmentId);
-  //     setTreatmentName(props.history.location.state.treatmentName);
-  //   }
-  // }, [props]);
-
-  const mapTreatments = () => {
+  useEffect(() => {    
+    console.log('treatment types: ' + treatmentType);
+  }, [treatmentType]);
+  const mapTreatments = () => {    
     var listOfTreatmentTypes: any[] = [];
 
     if (treatment === null || treatment === undefined) {
@@ -75,24 +79,16 @@ const Service: React.FunctionComponent<any> = (props: any) => {
         var obj = treatment[key];
 
         for (var prop in obj) {
-          if (prop === 'treatmentType') {
-            // console.log(prop + ' = ' + obj[prop]);
+          if (prop === 'treatmentType') {            
             if (Object.values(listOfTreatmentTypes).indexOf(obj[prop]) <= -1) {
               listOfTreatmentTypes.push(obj[prop]);
             }
           }
         }
       }
-      // console.log(Object.values(listOfTreatmentTypes).indexOf(2));
-      //TO GET Available treatment Types
-      // for (var type in listOfTreatmentTypes) {
-      //   // console.log(listOfTreatmentTypes[type]);
-      //   // treatmentTypes.push(listOfTreatmentTypes[type]);
-      // }
-      // console.log(listOfTreatmentTypes);
+
       if (Object.values(listOfTreatmentTypes).indexOf(2)) {
-        Object.keys(treatment).map((keyName, i) => {
-          // console.log(treatment[keyName]);
+        Object.keys(treatment).map((keyName, i) => {          
           return (
             <ExpansionPanelDetails>
               <FormGroup>
@@ -116,13 +112,11 @@ const Service: React.FunctionComponent<any> = (props: any) => {
           );
         });
       }
-    }
-    // console.log(treatment);
+    }    
   };
 
   useEffect(() => {
-    mapTreatments();
-    // mapTreatmentTypes();
+    mapTreatments();    
     beforeTreatmentSelectionState();
     console.log(treatment);
   }, [treatment]);
@@ -138,72 +132,88 @@ const Service: React.FunctionComponent<any> = (props: any) => {
     }
   };
 
-  const [selectedTreatment, setSelectedTreatment] = useState([0]);
   useEffect(() => {
     props.parentCallBack(selectedTreatment, treatmentName);
   }, [treatment, treatmentName, props, selectedTreatment]);
-  //   () => {
-  //   if (treatment === null || treatment === undefined) {
-  //     return null;
-  //   }
-  //   Object.keys(treatment).map((keyName, i) => {
-  //     return (treatment[keyName].id = false);
-  //   });
-  // }
 
-  const handleChange = (name: number, treatmentName: string) => (
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    // setSelectedTreatment({
-    //   ...selectedTreatment,
-    //   [name]: event.target.checked,
-    // });
+  const handleChange = (name: any, treatmentName: string) => () =>
+    // event: React.ChangeEvent<HTMLInputElement>
+    {
+      pushTreatments(name, treatmentName);
+    };
 
-    // var array: string[] = [...selectedTreatment];
-    // console.log(name);
-    // if (array.includes(name)) {
-    //   var index = array.indexOf(name);
-    //   array.splice(index, 1);
-    // } else {
-    //   array.push(name);
-    // }
-    // setSelectedTreatment(array);
-    pushTreatments(name, treatmentName);
-  };
-
-  const pushTreatments = (name: number, tName: string) => {
-    var array: number[] = [...selectedTreatment];
+  const pushTreatments = (name: any, tName: string) => {
+    var array: any[] = [...selectedTreatment];
     var treatmentNameArray: string[] = [...treatmentName];
-    console.log(name);
+    console.log('existing ' + array);
+    console.log('existing: ' + treatmentNameArray);
+    console.log('Treatment ID to be pushed' + name);
+    console.log('Treatment Name to be pushed' + tName);
+  
     if (array.includes(name)) {
-      var index = array.indexOf(name);
-      array.splice(index, 1);
-      console.log('removed: ' + array);
+      var index = array.indexOf(name);      
+      array.splice(index, 1);      
     } else {
-      array.push(name);
-      console.log('added: ' + array);
-    }
-    if (array.includes(0)) {
-      index = array.indexOf(0);
-      array.splice(index, 1);
+      array.push(name);      
     }
     setSelectedTreatment(array);
-    // TODO: if treatment name is the same, we can fix this by calling the treatment/{id} endpoint
     if (treatmentNameArray.includes(tName)) {
       index = treatmentNameArray.indexOf(tName);
-      treatmentNameArray.splice(index, 1);
-      console.log(treatmentNameArray);
+      treatmentNameArray.splice(index, 1);      
     } else {
-      treatmentNameArray.push(tName);
-      console.log(treatmentNameArray);
+      treatmentNameArray.push(tName);      
+    }
+    if (treatmentNameArray.includes('NoTreatmentAvailable')) {
+      index = treatmentNameArray.indexOf('NoTreatmentAvailable');
+      treatmentNameArray.splice(index, 1);
+    }    
+    setTreatmentName(treatmentNameArray);
+  };
+
+  //PRE-SELECT TREATMENTS
+  useEffect(() => {
+    var treatmentIds: string | any[] = [];
+    var treatmentNames: string | any[] = [];
+   
+    if (props.preSelectedTreatmentId !== undefined) {
+      treatmentIds = Object.values(props.preSelectedTreatmentId);
+    }
+    if (props.preSelectTreatmentName !== undefined) {
+      treatmentNames = Object.values(props.preSelectTreatmentName);
+    }        
+    var array: any[] = [];
+    var treatmentNameArray: string[] = [];
+    for (let i = 0; i < treatmentIds.length; i++) {   
+    if (array.includes(treatmentIds[i])) {
+      var index = array.indexOf(treatmentIds[i]);      
+      array.splice(index, 1);            
+    } else {
+      array.push(treatmentIds[i]);      
+    }    
+    setSelectedTreatment(array);
+    if (treatmentNameArray.includes(treatmentNames[i])) {
+      index = treatmentNameArray.indexOf(treatmentNames[i]);
+      treatmentNameArray.splice(index, 1);      
+    } else {
+      treatmentNameArray.push(treatmentNames[i]);     
     }
     if (treatmentNameArray.includes('NoTreatmentAvailable')) {
       index = treatmentNameArray.indexOf('NoTreatmentAvailable');
       treatmentNameArray.splice(index, 1);
     }
-    console.log('ARRAY ' + treatmentNameArray);
-    setTreatmentName(treatmentNameArray);
+    setTreatmentName(treatmentNameArray);   
+    }  
+  }, [props.preSelectedTreatmentId]);
+
+  const isDefaultChecked = (treatmentId: any) => {
+    if (selectedTreatment.includes(treatmentId)) {      
+      return true;
+    } else {
+      return false;
+    }
   };
+
+  // -----------------------------------------------------------------------------------------------------------------------------
 
   return (
     <>
@@ -214,175 +224,54 @@ const Service: React.FunctionComponent<any> = (props: any) => {
       ) : (
         <ThemeProvider theme={theme}>
           {mapTreatments}
-          <ExpansionPanel defaultExpanded={true}>
-            <ExpansionPanelSummary
-              expandIcon={<ExpandMoreIcon />}
-              aria-controls="panel1a-content"
-              id="panel1a-header"
-            >
-              <Typography className={classes.heading}>Natural Care</Typography>
-            </ExpansionPanelSummary>
-
-            {treatment !== undefined
-              ? Object.keys(treatment).map((keyName, i) => {
-                  if (
-                    treatment[keyName].About.TreatmentType === 'Natural Care'
-                  ) {
-                    return (
-                      <ExpansionPanelDetails>
-                        <FormGroup>
-                          <FormControlLabel
-                            control={
-                              <Checkbox
-                                checked={treatment.treatment1}
-                                icon={<FavoriteBorder />}
-                                checkedIcon={<Favorite />}
-                                onChange={handleChange(
-                                  treatment[keyName].ID,
-                                  treatment[keyName].About.TreatmentName
-                                )}
-                                value={`${treatment[keyName].ID}`}
+          {treatmentType.map((x: any) => {
+            return (
+              <ExpansionPanel
+                defaultExpanded={x === treatmentType[0] ? true : false}
+              >
+                <ExpansionPanelSummary
+                  expandIcon={<ExpandMoreIcon />}
+                  aria-controls="panel1a-content"
+                  id="panel1a-header"
+                >
+                  <Typography className={classes.heading}>{x}</Typography>
+                </ExpansionPanelSummary>
+                {treatment !== undefined
+                  ? Object.keys(treatment).map((keyName, i) => {
+                      if (treatment[keyName].About.TreatmentType === x) {
+                        return (
+                          <ExpansionPanelDetails>
+                            <FormGroup>
+                              <FormControlLabel
+                                control={
+                                  <Checkbox
+                                    checked={isDefaultChecked(
+                                      treatment[keyName].ID
+                                    )}
+                                    icon={<FavoriteBorder />}
+                                    checkedIcon={<Favorite />}
+                                    onChange={handleChange(
+                                      treatment[keyName].ID,
+                                      treatment[keyName].About.TreatmentName
+                                    )}
+                                    value={`${treatment[keyName].ID}`}
+                                  />
+                                }
+                                label={`${treatment[keyName].About.TreatmentName}`}
                               />
-                            }
-                            label={`${treatment[keyName].About.TreatmentName} `}
-                          />
-                          <p>{`£${treatment[keyName].About.Price} - ${treatment[keyName].About.Duration}mins`}</p>
-                          <Divider />
-                        </FormGroup>
-                      </ExpansionPanelDetails>
-                    );
-                  } else {
-                    return null;
-                  }
-                })
-              : null}
-          </ExpansionPanel>
-          {/* Panel 2 */}
-          <ExpansionPanel>
-            <ExpansionPanelSummary
-              expandIcon={<ExpandMoreIcon />}
-              aria-controls="panel1a-content"
-              id="panel1a-header"
-            >
-              <Typography className={classes.heading}>SNS</Typography>
-            </ExpansionPanelSummary>
-            {treatment !== undefined
-              ? Object.keys(treatment).map((keyName, i) => {
-                  // console.log(treatment[keyName]);
-                  if (treatment[keyName].About.TreatmentType === 'SNS') {
-                    return (
-                      <ExpansionPanelDetails>
-                        <FormGroup>
-                          <FormControlLabel
-                            control={
-                              <Checkbox
-                                checked={treatment.treatment1}
-                                icon={<FavoriteBorder />}
-                                checkedIcon={<Favorite />}
-                                onChange={handleChange(
-                                  treatment[keyName].ID,
-                                  treatment[keyName].About.TreatmentName
-                                )}
-                                value={`${treatment[keyName].ID}`}
-                              />
-                            }
-                            label={`${treatment[keyName].About.TreatmentName}`}
-                          />
-                          <p>{`£${treatment[keyName].About.Price} - ${treatment[keyName].About.Duration}mins`}</p>
-                          <Divider />
-                        </FormGroup>
-                      </ExpansionPanelDetails>
-                    );
-                  } else {
-                    return null;
-                  }
-                })
-              : null}
-          </ExpansionPanel>
-          {/* PANEL 3 */}
-          <ExpansionPanel>
-            <ExpansionPanelSummary
-              expandIcon={<ExpandMoreIcon />}
-              aria-controls="panel1a-content"
-              id="panel1a-header"
-            >
-              <Typography className={classes.heading}>Acrylic</Typography>
-            </ExpansionPanelSummary>
-            {treatment !== undefined
-              ? Object.keys(treatment).map((keyName, i) => {
-                  // console.log(treatment[keyName]);
-                  if (treatment[keyName].About.TreatmentType === 'Acrylic') {
-                    return (
-                      <ExpansionPanelDetails>
-                        <FormGroup>
-                          <FormControlLabel
-                            control={
-                              <Checkbox
-                                checked={treatment.treatment1}
-                                icon={<FavoriteBorder />}
-                                checkedIcon={<Favorite />}
-                                onChange={handleChange(
-                                  treatment[keyName].ID,
-                                  treatment[keyName].About.TreatmentName
-                                )}
-                                value={`${treatment[keyName].ID}`}
-                              />
-                            }
-                            label={`${treatment[keyName].About.TreatmentName}`}
-                          />
-                          <p>{`£${treatment[keyName].About.Price} - ${treatment[keyName].About.Duration}mins`}</p>
-                          <Divider />
-                        </FormGroup>
-                      </ExpansionPanelDetails>
-                    );
-                  } else {
-                    return null;
-                  }
-                })
-              : null}
-          </ExpansionPanel>
-          {/* PANEL 4 */}
-          <ExpansionPanel>
-            <ExpansionPanelSummary
-              expandIcon={<ExpandMoreIcon />}
-              aria-controls="panel1a-content"
-              id="panel1a-header"
-            >
-              <Typography className={classes.heading}>Gel Powder</Typography>
-            </ExpansionPanelSummary>
-            {treatment !== undefined
-              ? Object.keys(treatment).map((keyName, i) => {
-                  // console.log(treatment[keyName]);
-                  if (treatment[keyName].About.TreatmentType === 'Gel Powder') {
-                    return (
-                      <ExpansionPanelDetails>
-                        <FormGroup>
-                          <FormControlLabel
-                            control={
-                              <Checkbox
-                                checked={treatment.treatment1}
-                                icon={<FavoriteBorder />}
-                                checkedIcon={<Favorite />}
-                                onChange={handleChange(
-                                  treatment[keyName].ID,
-                                  treatment[keyName].About.TreatmentName
-                                )}
-                                value={`${treatment[keyName].ID}`}
-                              />
-                            }
-                            label={`${treatment[keyName].About.TreatmentName}`}
-                          />
-                          <p>{`£${treatment[keyName].About.Price} - ${treatment[keyName].About.Duration}mins`}</p>
-                          <Divider />
-                        </FormGroup>
-                      </ExpansionPanelDetails>
-                    );
-                  } else {
-                    return null;
-                  }
-                })
-              : null}
-          </ExpansionPanel>
+                              <p>{`£${treatment[keyName].About.Price} - ${treatment[keyName].About.Duration}mins`}</p>
+                              <Divider />
+                            </FormGroup>
+                          </ExpansionPanelDetails>
+                        );
+                      } else {
+                        return null;
+                      }
+                    })
+                  : null}
+              </ExpansionPanel>
+            );
+          })}
         </ThemeProvider>
       )}
     </>

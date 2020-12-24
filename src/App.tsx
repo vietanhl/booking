@@ -8,7 +8,6 @@ import {
   NavLink,
 } from 'react-router-dom';
 import styled from 'styled-components';
-import Menu from './components/Menu/Menu';
 import {
   HomePageView,
   TreatmentView,
@@ -18,15 +17,15 @@ import {
   ConfirmationView,
   OrderView,
   ErrorPageView,
+  AdminEditPageView,
 } from './views/LoadableView';
 import Footer from './components/Footer/Footer';
 import Auth from './Auth/auth';
 import Callback from './components/Callback/Callback';
-import Api from './Api/Api';
+import BookingManagement from './components/BookingManagement/BookingManagement';
+import { useMediaQuery } from 'react-responsive';
 //add to view
-import ConfirmationPage from './views/Confirm';
-
-const Container = styled.div``;
+// import ConfirmationPage from './views/Confirm';
 
 const Header = styled.body`
   background-color: white;
@@ -41,11 +40,19 @@ const Header = styled.body`
 const App = (props: any) => {
   const auth = new Auth(props.history);
 
+  const Default = ({ children }: any) => {
+    const isNotMobile = useMediaQuery({ minWidth: 1200 });
+    return isNotMobile ? children : null;
+  };
+
   return (
     <>
-      <NavLink className="menu-heading" to="/home">
-        <p className="centered">Paper&Pen</p>
-      </NavLink>{' '}
+      <Default>
+        <NavLink className="menu-heading" to="/home">
+          <p className="centered">Paper&Pen</p>
+        </NavLink>{' '}
+      </Default>
+
       <Header>
         <BrowserRouter>
           {/* <Menu auth={auth} {...props} /> */}
@@ -79,7 +86,7 @@ const App = (props: any) => {
             {/* <Route
               path="/book"
               component={(props: any) => {
-                return <Api auth={auth} {...props} />;
+                return <BookingManagement auth={auth} {...props} />;
               }}
             /> */}
 
@@ -89,7 +96,20 @@ const App = (props: any) => {
                 component={(props: any) =>
                   auth.isAuthenticated() &&
                   auth.userHasScopes(['read:customer']) ? (
-                    <Api auth={auth} {...props} />
+                    <BookingManagement auth={auth} {...props} />
+                  ) : (
+                    <Redirect to="/" />
+                  )
+                }
+              />
+            }
+            {
+              <Route
+                path="/admin-edit"
+                component={(props: any) =>
+                  auth.isAuthenticated() &&
+                  auth.userHasScopes(['read:customer']) ? (
+                    <AdminEditPageView auth={auth} {...props} />
                   ) : (
                     <Redirect to="/" />
                   )
