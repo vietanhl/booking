@@ -1,8 +1,10 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import Button from 'react-bootstrap/Button';
-import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
+import { BrowserRouter as  Route, Link } from 'react-router-dom';
 import * as api from '../../containers/BookContainer/BookContainer';
 import styled from 'styled-components';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const ContainerUl = styled.ul`
   padding-top: 20px;
@@ -59,10 +61,13 @@ const OrderButton: React.FunctionComponent = (props: any) => {
   };
 
   const validateEmail = (mail: string) => {
+    
     if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(mail)) {
       return true;
     }
-    alert('You have entered an invalid email address!');
+    toast(`Invalid email`, {
+      toastId: 'custom-id-yes',
+    });
     return false;
   };
 
@@ -139,6 +144,7 @@ const OrderButton: React.FunctionComponent = (props: any) => {
           </Link>
         </ContainerLi>
       </ContainerUl>
+      <ToastContainer />
     </>
   );
 };
