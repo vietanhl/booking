@@ -90,6 +90,7 @@ export default class Auth {
     this.auth0.logout({
       clientID: process.env.REACT_APP_AUTH0_CLIENTID,
       returnTo: 'https://paper-and-pen.herokuapp.com',
+      //returnTo: 'http://localhost:3000',
     });
   };
 
