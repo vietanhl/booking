@@ -1,6 +1,6 @@
 import React from 'react';
 import Button from 'react-bootstrap/Button';
-import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
 const ContainerUl = styled.ul`
@@ -25,16 +25,18 @@ const ContainerLi = styled.li`
 
 const BookButton: React.FunctionComponent = (props: any) => {
   const isDisabled = () => {
-    if (
-      props.treatmentId === undefined ||
-      Object.keys(props.treatmentId).length === 0 ||
-      props.treatmentId === 0 ||
-      Object.values(props.treatmentId)[0] === 0
-    ) {
-      return true;
-    } else {
-      return false;
-    }
+    console.log("BUTTON : " + props.treatmentId )
+    // if (
+    //   props.treatmentId === undefined ||
+    //   Object.keys(props.treatmentId).length === 0 ||
+    //   props.treatmentId === 0 ||
+    //   Object.values(props.treatmentId)[0] === 0
+    // ) {
+    //   return true;
+    // } else {
+    //   return false;
+    // }
+    return false;
   };
   return (
     <>
