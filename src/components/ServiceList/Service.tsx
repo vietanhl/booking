@@ -24,11 +24,12 @@ const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
       width: '100%',
-      fontFamily: 'Abril Fatface',
+      fontFamily: 'Abril Fatface'      
     },
     heading: {
       fontSize: theme.typography.pxToRem(15),
       fontFamily: 'Abril Fatface',
+      
     },
   })
 );
@@ -36,7 +37,8 @@ const useStyles = makeStyles((theme: Theme) =>
 const theme = createMuiTheme({
   typography: {
     body1: {
-      fontFamily: 'Abril Fatface',
+      fontFamily: 'Abril Fatface',    
+        
     },
   },
 });
@@ -48,7 +50,7 @@ const Service: React.FunctionComponent<any> = (
 ) => {
   const [treatment, setTreatment]: any = useState();
   const [treatmentName, setTreatmentName] = useState(['NoTreatmentAvailable']);
-  const [selectedTreatment, setSelectedTreatment] = useState([0]);
+  const [selectedTreatment, setSelectedTreatment]: any[] = useState();
   const [treatmentType, setTreatmentType] = useState([]);
 
   useEffect(() => {
@@ -142,8 +144,14 @@ const Service: React.FunctionComponent<any> = (
       pushTreatments(name, treatmentName);
     };
 
-  const pushTreatments = (name: any, tName: string) => {
-    var array: any[] = [...selectedTreatment];
+  const pushTreatments = (name: string, tName: string) => {
+    var array = [] as any;
+    if(selectedTreatment === undefined){      
+      array = [];      
+    }
+    else {
+      array = [...selectedTreatment];
+    }
     var treatmentNameArray: string[] = [...treatmentName];
     console.log('existing ' + array);
     console.log('existing: ' + treatmentNameArray);
@@ -181,7 +189,7 @@ const Service: React.FunctionComponent<any> = (
     if (props.preSelectTreatmentName !== undefined) {
       treatmentNames = Object.values(props.preSelectTreatmentName);
     }        
-    var array: any[] = [];
+    var array = [] as any;
     var treatmentNameArray: string[] = [];
     for (let i = 0; i < treatmentIds.length; i++) {   
     if (array.includes(treatmentIds[i])) {
@@ -203,10 +211,12 @@ const Service: React.FunctionComponent<any> = (
     }
     setTreatmentName(treatmentNameArray);   
     }  
-  }, [props.preSelectedTreatmentId]);
+  }, [props.preSelectTreatmentName, props.preSelectedTreatmentId]);
 
   const isDefaultChecked = (treatmentId: any) => {
-    if (selectedTreatment.includes(treatmentId)) {      
+    if(selectedTreatment === undefined){
+      return false;
+    } else if (selectedTreatment.includes(treatmentId)) {      
       return true;
     } else {
       return false;
@@ -259,7 +269,7 @@ const Service: React.FunctionComponent<any> = (
                                 }
                                 label={`${treatment[keyName].About.TreatmentName}`}
                               />
-                              <p>{`£${treatment[keyName].About.Price} - ${treatment[keyName].About.Duration}mins`}</p>
+                              <p className="priceFont">{`£${treatment[keyName].About.Price} - ${treatment[keyName].About.Duration}mins`}</p>
                               <Divider />
                             </FormGroup>
                           </ExpansionPanelDetails>

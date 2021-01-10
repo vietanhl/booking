@@ -13,7 +13,7 @@ const Book: React.FunctionComponent = (props: any) => {
     setDate(date);
     setTime(time);
   };
-  const Default = ({ children }: any) => {
+  const Default = ({ children }: any) => {    
     const isNotMobile = useMediaQuery({ minWidth: 900 });
     return isNotMobile ? children : null;
   };

@@ -26,17 +26,17 @@ const ContainerLi = styled.li`
 const BookButton: React.FunctionComponent = (props: any) => {
   const isDisabled = () => {
     console.log("BUTTON : " + props.treatmentId )
-    // if (
-    //   props.treatmentId === undefined ||
-    //   Object.keys(props.treatmentId).length === 0 ||
-    //   props.treatmentId === 0 ||
-    //   Object.values(props.treatmentId)[0] === 0
-    // ) {
-    //   return true;
-    // } else {
-    //   return false;
-    // }
-    return false;
+    if (
+      props.treatmentId === undefined ||
+      Object.keys(props.treatmentId).length === 0 ||
+      props.treatmentId === 0 ||
+      Object.values(props.treatmentId)[0] === 0
+    ) {
+      return true;
+    } else {
+      return false;
+    }
+    // return false;
   };
   return (
     <>

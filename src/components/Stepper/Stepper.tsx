@@ -8,17 +8,24 @@ const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
       width: '600px',
+      backgroundColor: "#f4f5f7",
+      color: "#f4f5f7",
+      padding: '20px',
+      "& .MuiStepper-root": {
+        padding: '0px',
+        backgroundColor: "#f4f5f7"
+      } 
     },
     backButton: {
-      marginRight: theme.spacing(1),
+      marginRight: theme.spacing(1),      
     },
     instructions: {
       marginTop: theme.spacing(1),
-      marginBottom: theme.spacing(1),
+      marginBottom: theme.spacing(1),          
     },
     body: {
-      fontFamily: 'Abril Fatface',
-    },
+      fontFamily: 'Abril Fatface',         
+    }
   })
 );
 function getSteps() {
@@ -54,6 +61,7 @@ export default function HorizontalLabelPositionBelowStepper() {
     }
   }, []);
   return (
+    <>
     <div className={classes.root}>
       <Stepper activeStep={activeStep} alternativeLabel>
         {steps.map((label) => (
@@ -65,5 +73,6 @@ export default function HorizontalLabelPositionBelowStepper() {
         ))}
       </Stepper>
     </div>
+    </>
   );
 }
