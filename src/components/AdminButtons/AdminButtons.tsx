@@ -1,6 +1,5 @@
 import React, { useEffect } from 'react';
 import Button from 'react-bootstrap/Button';
-import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
 import * as api from '../../containers/AdminEmployeeContainer/AdminEmployeeContainer';
 import styled from 'styled-components';
 
