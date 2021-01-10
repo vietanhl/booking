@@ -203,3 +203,7 @@ label {
   clear: "left";
   overflow: hidden;
 }
+
+.priceFont {
+  color: rgba(60,60,60,.8)
+}

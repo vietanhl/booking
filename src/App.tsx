@@ -28,7 +28,7 @@ import { useMediaQuery } from 'react-responsive';
 // import ConfirmationPage from './views/Confirm';
 
 const Header = styled.body`
-  background-color: white;
+  background-color: #f4f5f7;
   min-height: 100vh;
   display: flex;
   flex-direction: column;

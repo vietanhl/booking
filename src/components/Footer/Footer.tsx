@@ -8,13 +8,13 @@ const StyledFooter = styled.div`
   text-align: center;
   list-style: none;
   font-family: 'Abril Fatface', cursive;
-  background-color: white;
+  background-color: #f4f5f7;
   padding-bottom: 20px;
   padding-top: 20px;
   color: #282c34;
 `;
 const StyledText = styled.p`
-  background-color: white;
+  background-color: #f4f5f7;
 `;
 const Footer: React.FunctionComponent = () => {
   const sendEmail = () => {
