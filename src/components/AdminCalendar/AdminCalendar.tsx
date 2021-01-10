@@ -9,16 +9,13 @@ const AdminCalendar: React.FunctionComponent = (props: any) => {
   const now = new Date();
   const [dateReq, setDateReq] = useState(now.toISOString().substring(10, 0));
   // const [modalOpen, setModalOpen] = useState(false);
-  // const [currentEvent, setCurrentEvent] = useState();
-  console.log(now);
-
-  //TODO: Change default booking.
+  // const [currentEvent, setCurrentEvent] = useState();    
   const [event, setEvent] = useState([
     {
       id: '',
       title: '',
-      start: now,
-      end: now,
+      start: Date,
+      end: Date,
       employee: '',
     },
   ]);
@@ -38,7 +35,7 @@ const AdminCalendar: React.FunctionComponent = (props: any) => {
           return response[i];
         });
 
-        const eventsMapped = res.map((booking: any) => {
+        const eventsMapped: any = res.map((booking: any) => {
           return {
             id: booking.ID,
             title: `${booking.EmployeeName} - Client: ${booking.Clients.FirstName} Treatment: ${booking.TreatmentNames}`,
