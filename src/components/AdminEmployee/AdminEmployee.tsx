@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import * as api from '../../containers/AdminEmployeeContainer/AdminEmployeeContainer';
 import TreatmentList from '../../components/ServiceList';
-import { FormGroup, FormControlLabel, Checkbox } from '@material-ui/core';
+import { FormGroup, FormControlLabel, Checkbox, MenuItem, Select, InputLabel, FormControl } from '@material-ui/core';
 import AdminButtons from '../../components/AdminButtons/AdminButtons';
-
-interface State extends React.Props<any> {
+interface State {
   id: string;
   name: string;
   email: string;
@@ -13,6 +12,21 @@ interface State extends React.Props<any> {
 }
 
 const AdminEmployee: React.FunctionComponent = (props: any) => {
+  const [employeeSelected, setEmployeeSelected]: any = React.useState<State>({
+    id: '',
+    name: '',
+    email: '',
+    treatments: [],
+    workdays: '',
+  });
+  const handleChange = (event: React.ChangeEvent<{ value: any }>) => {
+    setEmployeeSelected(event.target.value);
+    console.log(event.target.value);
+    //1. Get all employees ID, couple with their Name (X)
+    //2. Display this on the dropdown (X)
+    //3. Once clicked (X)
+    //4. Set employee to that employee
+  };
   const [employee, setEmployee]: any = React.useState<State>({
     id: '',
     name: '',
@@ -20,7 +34,6 @@ const AdminEmployee: React.FunctionComponent = (props: any) => {
     treatments: [],
     workdays: '',
   });
-
   const [event, setEvent] = useState();
   const [editBooking, setEditBooking] = useState(false);
   console.log('event from admin page' + JSON.stringify(event));
@@ -31,6 +44,8 @@ const AdminEmployee: React.FunctionComponent = (props: any) => {
       setEditBooking(true);
     }
   };
+
+    
 
   useEffect(() => {
     async function fetchMyApi() {
@@ -53,6 +68,7 @@ const AdminEmployee: React.FunctionComponent = (props: any) => {
         }
       );
       setEmployee(eventsMapped);
+      // console.log("Events Mapped "+ JSON.stringify(eventsMapped));
     }
     fetchMyApi();
   }, []);
@@ -63,7 +79,7 @@ const AdminEmployee: React.FunctionComponent = (props: any) => {
   // };
 
   // const weekdays = ['Monday', 'Tues', 'Wed', 'Thurs', 'Fri', 'Sat', 'Sun'];
-  const [weekdays, setWeekdays] = React.useState({
+  const [weekdays, setWeekdays]:any = React.useState({
     Monday: false,
     Tuesday: false,
     Wednesday: false,
@@ -74,13 +90,62 @@ const AdminEmployee: React.FunctionComponent = (props: any) => {
   });
   const handleDays = (event: React.ChangeEvent<HTMLInputElement>) => {
     setWeekdays({ ...weekdays, [event.target.name]: event.target.checked });
+   
   };
+
+  // - --- -- - - - - - -- - TO FIX WEEKDAYS
   useEffect(() => {
-    console.log(weekdays);
-  }, [weekdays]);
+    // console.log("fdsafdsa" +JSON.stringify(weekdays));
+    var bod = {...employeeSelected};
+    console.log("111111" + JSON.stringify(bod));
+    // console.log("BEFORE ANY MODS: " + JSON.stringify(bod));
+    var weekDaySelected = {...weekdays};
+    for(var day in weekDaySelected){
+      if(weekDaySelected[day] === false){
+        delete weekDaySelected[day];
+      }
+    }
+    console.log("TEST2" + JSON.stringify(weekDaySelected));
+    var weekDayArray = Object.keys(weekDaySelected);
+    // console.log("TEST3" + typeof weekDayArray);
+    // delete bod.workdays;
+    console.log("WEEKDAYSARRAY" + weekDayArray);
+    
+    bod.workdays = weekDayArray;
+    console.log("prev employee: " + JSON.stringify(bod));
+    // setUpdatedEmployee({
+    //   id: employee.id,
+    //   name: employee.name,
+    //   email: employee.email,
+    //   treatments: employee.treatments,
+    //   workdays: employee.workdays,
+    // });
+    setEmployeeSelected(bod);
+    console.log("new employee: " + JSON.stringify(bod));
+  },  [weekdays]);
+  useEffect(() => {
+    console.log("Employee" + JSON.stringify(employeeSelected))
+    console.log("FIELD1 " + employeeSelected.id);
+  },[employeeSelected]);
 
   return (
     <>
+    <p>Select employee to edit</p>
+    <FormControl >
+        <InputLabel id="demo-customized-select-label">Employees</InputLabel>
+        <Select
+          labelId="demo-customized-select-label"
+          id="demo-customized-select"
+          value={
+            employeeSelected
+          }
+          onChange={handleChange}          
+        >
+          {Object.keys(employee).map((key, val) => {        
+         return( <MenuItem value={employee[key]}>{employee[key].name}</MenuItem> )
+  })}
+        </Select>
+      </FormControl>
       {Object.keys(employee).map((key, val) => {
         // console.log(employee[val]);
         return (
@@ -144,7 +209,7 @@ const AdminEmployee: React.FunctionComponent = (props: any) => {
               {...props}
             />
 
-            <AdminButtons id={employee[key].id} {...props} />
+            <AdminButtons id={employeeSelected?.id} name={employeeSelected?.name} email={employeeSelected?.email} treatments={employeeSelected?.treatments} workdays={employeeSelected?.workdays} {...props} />            
             <p> -------- </p>
           </div>
         );

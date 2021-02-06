@@ -143,7 +143,7 @@ const AdminCalendar: React.FunctionComponent = (props: any) => {
           style: {
             backgroundColor:
               event.employee !== '5eb603958451d805f9e3215e'
-                ? '#3174ad'
+                ? '#039BF9'
                 : '#ad4ca4',
             width: '10%',
           },

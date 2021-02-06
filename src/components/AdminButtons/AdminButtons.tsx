@@ -22,18 +22,30 @@ const ContainerLi = styled.li`
     color: #282c34;
   }
 `;
+// name: any, email: any, treatments:any, workdays:any
 
-const AdminButtons: React.FunctionComponent = (id: any, props: any) => {
+const AdminButtons: React.FunctionComponent = (body: any, props:any) => {
   useEffect(() => {
     console.log('PROPS from Admin button : ' + JSON.stringify(props));
   }, [props]);
   const editEmployee = () => {
-    console.log('Edit employee clicked' + id.id);
-    console.log('props: ');
-    // api.EditEmployee(id.id)
+    // console.log('Edit employee clicked' + id.id);
+    console.log('body:' + JSON.stringify(body)); 
+    console.log('body:' + JSON.stringify(props));      
+    var reqBody = {
+      details: {
+        name: body.name,
+        email: body.email,
+      },
+      treatments: body.treatments,
+      workDays: body.workdays
+    };
+    console.log("REQUEST BODY: " + JSON.stringify(reqBody));
+
+    api.EditEmployee(body.id, reqBody);
   };
   const deleteEmployee = async () => {
-    const res = await api.deleteEmployee(id.id);
+    const res = await api.deleteEmployee(body.id);
     console.log(res);
   };
   return (

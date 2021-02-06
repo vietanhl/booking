@@ -17,13 +17,14 @@ export const getAllEmployees = async () => {
   return response;
 };
 
-export const EditEmployee = async (id: string) => {
+export const EditEmployee = async (id: string, body: any) => {
   var response: any = null;
+  console.log(body);
   const fetchData = async () => {
     await axios
-      .post(`${endpoints.employee}/${id}`, {
-        //BODY of request here
-      })
+      .put(`${endpoints.employee}/${id}`, 
+        body
+      )
       .then((res) => {
         response = res.data;
       })
