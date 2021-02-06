@@ -230,7 +230,7 @@ const Service: React.FunctionComponent<any> = (
       {treatment === undefined ? (
         <Spinner animation="border" role="status">
           <span className="sr-only">Loading...</span>
-        </Spinner>
+        </Spinner>        
       ) : (
         <ThemeProvider theme={theme}>
           {mapTreatments}
