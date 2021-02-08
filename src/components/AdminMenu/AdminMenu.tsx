@@ -6,8 +6,7 @@ import Tab from '@material-ui/core/Tab';
 import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
 import AdminEmployee from '../AdminEmployee/AdminEmployee';
-import TextField from '@material-ui/core/TextField';
-import TreatmentList from '../../components/ServiceList';
+import AdminTreatment from '../AdminTreatment/AdminTreatment'
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -49,10 +48,6 @@ const useStyles = makeStyles((theme: Theme) => ({
     backgroundColor: "#f4f5f7",
   },
 }));
-// const [treatmentSelected, setTreatmentSelected] = useState();
-// const treatmentPicked = (ev: any) => {
-//   setTreatmentSelected(ev);
-// };
 
 export default function ScrollableTabsButtonAuto() {
   const classes = useStyles();
@@ -82,44 +77,22 @@ export default function ScrollableTabsButtonAuto() {
           <Tab label="Employees" {...a11yProps(0)} />
           <Tab label="Treatments" {...a11yProps(1)} />
           <Tab label="Opening Hours" {...a11yProps(2)} />
-          {/* <Tab label="Item Four" {...a11yProps(3)} />
-          <Tab label="Item Five" {...a11yProps(4)} />
-          <Tab label="Item Six" {...a11yProps(5)} />
-          <Tab label="Item Seven" {...a11yProps(6)} /> */}
+          {/* <Tab label="Item Four" {...a11yProps(3)} /> */}
         </Tabs>
       </AppBar>
       <TabPanel value={value} index={0}>        
         <AdminEmployee />
       </TabPanel>
       <TabPanel value={value} index={1}>
-        Edit treatment
-        <form>
-          <TextField
-            required
-            id="treatment-name"
-            label="Treatment name"
-            // value={values.firstName}
-            // onChange={handleChange('firstName')}
-          />
-        </form>
-        {/* {treatmentSelected} */}
-        <TreatmentList parentCallBack={treatmentPicked} />
+            
+              <AdminTreatment />    
       </TabPanel>
       <TabPanel value={value} index={2}>
         Opening hours
       </TabPanel>
       {/* <TabPanel value={value} index={3}>
         Item Four
-      </TabPanel>
-      <TabPanel value={value} index={4}>
-        Item Five
-      </TabPanel>
-      <TabPanel value={value} index={5}>
-        Item Six
-      </TabPanel>
-      <TabPanel value={value} index={6}>
-        Item Seven
-      </TabPanel> */}
+      </TabPanel>*/}
     </div>
   );
 }
