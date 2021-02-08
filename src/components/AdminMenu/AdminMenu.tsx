@@ -46,7 +46,7 @@ const useStyles = makeStyles((theme: Theme) => ({
   root: {
     flexGrow: 1,
     width: '100%',
-    backgroundColor: theme.palette.background.paper,
+    backgroundColor: "#f4f5f7",
   },
 }));
 // const [treatmentSelected, setTreatmentSelected] = useState();
@@ -69,7 +69,7 @@ export default function ScrollableTabsButtonAuto() {
 
   return (
     <div className={classes.root}>
-      <AppBar position="static" color="default">
+      <AppBar position="static" color="inherit">
         <Tabs
           value={value}
           onChange={handleChange}
