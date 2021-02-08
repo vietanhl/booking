@@ -32,7 +32,7 @@ const AdminEmployee: React.FunctionComponent = (props: any) => {
 const classes = useStyles();
 
 
-  const handleChange = (event: React.ChangeEvent<{ value: any }>) => {
+  const handleChange = (event: React.ChangeEvent<{ value: any }>) => {    
     setEmployeeSelected(event.target.value);    
   };
   const [employee, setEmployee]: any = React.useState<State>({
@@ -98,28 +98,38 @@ const classes = useStyles();
     setEmployeeSelected(bod);
   },  [weekdays]);
 
+  // useEffect(() => {
+  //   console.log("Employee Selected + " + JSON.stringify(employeeSelected));
+  // }, [employeeSelected])
+
+  const handleEmployeeChange = (prop: keyof State) => (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    setEmployeeSelected({ ...employeeSelected, [prop]: event.target.value });    
+  };
   return (
     <>    
     {(employeeSelected.id === '')?
-    <p><br/> Please select an employee:</p>: null}
+    <p><br/> Please select an employee:</p> : null}
         <FormControl className={classes.formControl}>
-        <InputLabel id="demo-customized-select-label">Employees</InputLabel>
-        
+        <InputLabel id="select-label">Employees</InputLabel>        
         <Select
-          labelId="demo-customized-select-label"
-          id="demo-customized-select"
+          labelId="select-label"
+          id="customized-select"
           value={
             employeeSelected
           }
           onChange={handleChange} 
-          autoWidth={true}             
-        >
+          autoWidth={true}>
           <MenuItem disabled value="">
             <em>Employees</em>
           </MenuItem>
-          {Object.keys(employee).map((key, val) => {        
-         return( <MenuItem value={employee[key]}>{employee[key].name}</MenuItem> )
-  })}
+          { Object.keys(employee).map((key, val) => {        
+            return ( 
+              <MenuItem value={employee[key]}>
+                {employee[key].name}
+              </MenuItem> )
+          })}
         </Select>
       </FormControl>  
       {(employeeSelected.id !== '')?
@@ -132,8 +142,9 @@ const classes = useStyles();
                 Name:
                 <input
                   type="text"
-                  name="ssfdsfsd"
-                  defaultValue={employeeSelected.name}
+                  name="name"
+                  defaultValue={employeeSelected.name}                  
+                  onChange={handleEmployeeChange('name')}
                 ></input>
               </p>
               <br />
@@ -141,8 +152,9 @@ const classes = useStyles();
                 Email:
                 <input
                   type="text"
-                  name="ssfdsfsd"
+                  name="email"
                   defaultValue={employeeSelected.email}
+                  onChange={handleEmployeeChange('email')}
                 ></input>
               </p>     
             </form>
