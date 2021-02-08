@@ -66,7 +66,7 @@ const classes = useStyles();
             workdays: employeeInfo.WorkDays,
           };
         }
-      );
+      );      
       setEmployee(eventsMapped);      
     }
     fetchMyApi();
@@ -83,8 +83,8 @@ const classes = useStyles();
   });
   const handleDays = (event: React.ChangeEvent<HTMLInputElement>) => {
     setWeekdays({ ...weekdays, [event.target.name]: event.target.checked });
-   
   };
+
 
   useEffect(() => {    
     var bod = {...employeeSelected};    
@@ -161,31 +161,31 @@ const classes = useStyles();
             <FormGroup row>
               <FormControlLabel
                 control={<Checkbox onChange={handleDays} name="Monday" />}
-                label="Monday"
+                label="Monday"                
               />
               <FormControlLabel
                 control={<Checkbox onChange={handleDays} name="Tuesday" />}
-                label="Tuesday"
+                label="Tuesday"                
               />
               <FormControlLabel
                 control={<Checkbox onChange={handleDays} name="Wednesday" />}
-                label="Wednesday"
+                label="Wednesday"                
               />
               <FormControlLabel
                 control={<Checkbox onChange={handleDays} name="Thursday" />}
-                label="Thursday"
+                label="Thursday"                
               />
               <FormControlLabel
                 control={<Checkbox onChange={handleDays} name="Friday" />}
-                label="Friday"
+                label="Friday"                
               />
               <FormControlLabel
                 control={<Checkbox onChange={handleDays} name="Saturday" />}
-                label="Saturday"
+                label="Saturday"                
               />
               <FormControlLabel
                 control={<Checkbox onChange={handleDays} name="Sunday" />}
-                label="Sunday"
+                label="Sunday"                
               />
             </FormGroup>
             <TreatmentList
