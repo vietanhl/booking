@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import * as api from '../../containers/AdminEmployeeContainer/AdminEmployeeContainer';
 import TreatmentList from '../../components/ServiceList';
-import { FormGroup, FormControlLabel, Checkbox, MenuItem, Select, InputLabel, FormControl, createStyles, Theme } from '@material-ui/core';
+import { FormGroup, FormControlLabel, Checkbox, MenuItem, Select, InputLabel, FormControl, createStyles, Theme, styled } from '@material-ui/core';
 import AdminButtons from '../../components/AdminButtons/AdminButtons';
 import { makeStyles } from '@material-ui/core';
 interface State {
@@ -30,6 +30,7 @@ const AdminEmployee: React.FunctionComponent = (props: any) => {
   }),
 );
 const classes = useStyles();
+
 
   const handleChange = (event: React.ChangeEvent<{ value: any }>) => {
     setEmployeeSelected(event.target.value);    
@@ -99,7 +100,9 @@ const classes = useStyles();
 
   return (
     <>    
-    <FormControl className={classes.formControl}>
+    {(employeeSelected.id === '')?
+    <p><br/> Please select an employee:</p>: null}
+        <FormControl className={classes.formControl}>
         <InputLabel id="demo-customized-select-label">Employees</InputLabel>
         
         <Select
@@ -118,7 +121,7 @@ const classes = useStyles();
          return( <MenuItem value={employee[key]}>{employee[key].name}</MenuItem> )
   })}
         </Select>
-      </FormControl>      
+      </FormControl>  
       {(employeeSelected.id !== '')?
       <>
       {      
@@ -182,7 +185,14 @@ const classes = useStyles();
           </div>     
       }
     </>
-    : <p><br/> Please select an employee above</p>}</>)}
+    : null}
+    
+</>
+
+    )
+  }
+
+
 
 
 export default AdminEmployee;
