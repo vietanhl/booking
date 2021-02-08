@@ -4,22 +4,22 @@ import { Spinner } from 'reactstrap';
 
 export const HomePageView = Loadable({
   loader: () => import('./Homepage'),
-  loading: () => <Spinner color="dark" />,
+  loading: () => <Spinner color="dark"/>,
 });
 
 export const TreatmentView = Loadable({
   loader: () => import('./Service'),
-  loading: () => <Spinner color="dark" />,
+  loading: () => <Spinner color="dark"/>,
 });
 
 export const ContactView = Loadable({
   loader: () => import('./Contact'),
-  loading: () => <Spinner color="dark" />,
+  loading: () => <Spinner color="dark"/>,
 });
 
 export const LoginView = Loadable({
   loader: () => import('./Login'),
-  loading: () => <Spinner color="dark" />,
+  loading: () => <Spinner color="dark"/>,
 });
 
 export const BookView = Loadable({
@@ -29,7 +29,7 @@ export const BookView = Loadable({
 
 export const ConfirmationView = Loadable({
   loader: () => import('./Confirm'),
-  loading: () => <Spinner color="dark" />,
+  loading: () => <Spinner color="dark"/>,
 });
 
 export const OrderView = Loadable({
@@ -44,5 +44,5 @@ export const ErrorPageView = Loadable({
 
 export const AdminEditPageView = Loadable({
   loader: () => import('./AdminEdit'),
-  loading: () => <Spinner color="dark" />,
+  loading: () => <Spinner color="dark"/>,
 });

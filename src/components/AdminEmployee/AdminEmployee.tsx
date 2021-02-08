@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import * as api from '../../containers/AdminEmployeeContainer/AdminEmployeeContainer';
 import TreatmentList from '../../components/ServiceList';
-import { FormGroup, FormControlLabel, Checkbox } from '@material-ui/core';
+import { FormGroup, FormControlLabel, Checkbox, MenuItem, Select, InputLabel, FormControl, createStyles, Theme, styled } from '@material-ui/core';
 import AdminButtons from '../../components/AdminButtons/AdminButtons';
-
-interface State extends React.Props<any> {
+import { makeStyles } from '@material-ui/core';
+interface State {
   id: string;
   name: string;
   email: string;
@@ -13,7 +13,7 @@ interface State extends React.Props<any> {
 }
 
 const AdminEmployee: React.FunctionComponent = (props: any) => {
-  const [employee, setEmployee]: any = React.useState<State>({
+  const [employeeSelected, setEmployeeSelected]: any = React.useState<State>({
     id: '',
     name: '',
     email: '',
@@ -21,15 +21,30 @@ const AdminEmployee: React.FunctionComponent = (props: any) => {
     workdays: '',
   });
 
+  const useStyles = makeStyles((theme: Theme) =>
+  createStyles({
+    formControl: {
+      margin: theme.spacing(1),
+      minWidth: 150,
+    },
+  }),
+);
+const classes = useStyles();
+
+
+  const handleChange = (event: React.ChangeEvent<{ value: any }>) => {    
+    setEmployeeSelected(event.target.value);    
+  };
+  const [employee, setEmployee]: any = React.useState<State>({
+    id: '',
+    name: '',
+    email: '',
+    treatments: [],
+    workdays: '',
+  });
   const [event, setEvent] = useState();
-  const [editBooking, setEditBooking] = useState(false);
-  console.log('event from admin page' + JSON.stringify(event));
   const eventSelected = (ev: any) => {
-    setEvent(ev);
-    console.log('ev' + JSON.stringify(ev));
-    if (editBooking === false) {
-      setEditBooking(true);
-    }
+    setEvent(ev);    
   };
 
   useEffect(() => {
@@ -51,19 +66,13 @@ const AdminEmployee: React.FunctionComponent = (props: any) => {
             workdays: employeeInfo.WorkDays,
           };
         }
-      );
-      setEmployee(eventsMapped);
+      );      
+      setEmployee(eventsMapped);      
     }
     fetchMyApi();
   }, []);
-  // const handleChange = (prop: keyof State) => (
-  //   event: React.ChangeEvent<HTMLInputElement>
-  // ) => {
-  //   setEmployee({ ...employee, [prop]: event.target.value });
-  // };
 
-  // const weekdays = ['Monday', 'Tues', 'Wed', 'Thurs', 'Fri', 'Sat', 'Sun'];
-  const [weekdays, setWeekdays] = React.useState({
+  const [weekdays, setWeekdays]:any = React.useState({
     Monday: false,
     Tuesday: false,
     Wednesday: false,
@@ -75,24 +84,67 @@ const AdminEmployee: React.FunctionComponent = (props: any) => {
   const handleDays = (event: React.ChangeEvent<HTMLInputElement>) => {
     setWeekdays({ ...weekdays, [event.target.name]: event.target.checked });
   };
-  useEffect(() => {
-    console.log(weekdays);
-  }, [weekdays]);
 
+
+  useEffect(() => {    
+    var bod = {...employeeSelected};    
+    var weekDaySelected = {...weekdays};
+    for(var day in weekDaySelected){
+      if(weekDaySelected[day] === false){
+        delete weekDaySelected[day];
+      }}    
+    var weekDayArray = Object.keys(weekDaySelected);    
+    bod.workdays = weekDayArray;
+    setEmployeeSelected(bod);
+  },  [weekdays]);
+
+  // useEffect(() => {
+  //   console.log("Employee Selected + " + JSON.stringify(employeeSelected));
+  // }, [employeeSelected])
+
+  const handleEmployeeChange = (prop: keyof State) => (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    setEmployeeSelected({ ...employeeSelected, [prop]: event.target.value });    
+  };
   return (
-    <>
-      {Object.keys(employee).map((key, val) => {
-        // console.log(employee[val]);
-        return (
+    <>    
+    {(employeeSelected.id === '')?
+    <p><br/> Please select an employee:</p> : null}
+        <FormControl className={classes.formControl}>
+        <InputLabel id="select-label">Employees</InputLabel>        
+        <Select
+          labelId="select-label"
+          id="customized-select"
+          value={
+            employeeSelected
+          }
+          onChange={handleChange} 
+          autoWidth={true}>
+          <MenuItem disabled value="">
+            <em>Employees</em>
+          </MenuItem>
+          { Object.keys(employee).map((key, val) => {        
+            return ( 
+              <MenuItem value={employee[key]}>
+                {employee[key].name}
+              </MenuItem> )
+          })}
+        </Select>
+      </FormControl>  
+      {(employeeSelected.id !== '')?
+      <>
+      {      
           <div>
-            <h1>{employee[key].name}</h1>
+            <h1>{employeeSelected.name}</h1>
             <form>
               <p>
                 Name:
                 <input
                   type="text"
-                  name="ssfdsfsd"
-                  defaultValue={employee[key].name}
+                  name="name"
+                  defaultValue={employeeSelected.name}                  
+                  onChange={handleEmployeeChange('name')}
                 ></input>
               </p>
               <br />
@@ -100,57 +152,59 @@ const AdminEmployee: React.FunctionComponent = (props: any) => {
                 Email:
                 <input
                   type="text"
-                  name="ssfdsfsd"
-                  defaultValue={employee[key].email}
+                  name="email"
+                  defaultValue={employeeSelected.email}
+                  onChange={handleEmployeeChange('email')}
                 ></input>
-              </p>
-              {/* <p>Treatments: {employee[key].treatments}</p>
-              <br />
-              <p>Work days: {employee[key].workdays}</p> */}
+              </p>     
             </form>
             <FormGroup row>
               <FormControlLabel
                 control={<Checkbox onChange={handleDays} name="Monday" />}
-                label="Monday"
+                label="Monday"                
               />
               <FormControlLabel
                 control={<Checkbox onChange={handleDays} name="Tuesday" />}
-                label="Tuesday"
+                label="Tuesday"                
               />
               <FormControlLabel
                 control={<Checkbox onChange={handleDays} name="Wednesday" />}
-                label="Wednesday"
+                label="Wednesday"                
               />
               <FormControlLabel
                 control={<Checkbox onChange={handleDays} name="Thursday" />}
-                label="Thursday"
+                label="Thursday"                
               />
               <FormControlLabel
                 control={<Checkbox onChange={handleDays} name="Friday" />}
-                label="Friday"
+                label="Friday"                
               />
               <FormControlLabel
                 control={<Checkbox onChange={handleDays} name="Saturday" />}
-                label="Saturday"
+                label="Saturday"                
               />
               <FormControlLabel
                 control={<Checkbox onChange={handleDays} name="Sunday" />}
-                label="Sunday"
+                label="Sunday"                
               />
             </FormGroup>
             <TreatmentList
-              preSelectedTreatmentId={employee.treatments}
+              preSelectedTreatmentId={employeeSelected.treatments}
               parentCallBack={eventSelected}
               {...props}
-            />
-
-            <AdminButtons id={employee[key].id} {...props} />
-            <p> -------- </p>
-          </div>
-        );
-      })}
+            />                     
+            <AdminButtons id={employeeSelected?.id} name={employeeSelected?.name} email={employeeSelected?.email} treatments={event} workdays={employeeSelected?.workdays} {...props} />                        
+          </div>     
+      }
     </>
-  );
-};
+    : null}
+    
+</>
+
+    )
+  }
+
+
+
 
 export default AdminEmployee;
